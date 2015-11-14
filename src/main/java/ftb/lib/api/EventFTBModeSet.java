@@ -2,8 +2,8 @@ package ftb.lib.api;
 
 import java.io.File;
 
-import cpw.mods.fml.relauncher.Side;
 import ftb.lib.FTBLib;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class EventFTBModeSet extends EventLM
 {

@@ -1,7 +1,7 @@
 package ftb.lib.api;
 
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.command.ICommandSender;
+import net.minecraftforge.fml.relauncher.Side;
 
 /** Should only be used by FTBUtilities! */
 public class EventFTBReloadPre extends EventLM

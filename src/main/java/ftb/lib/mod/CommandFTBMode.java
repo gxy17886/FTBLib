@@ -2,15 +2,15 @@ package ftb.lib.mod;
 
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
 import ftb.lib.*;
 import ftb.lib.api.GameModes;
 import net.minecraft.command.*;
 import net.minecraft.util.*;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class CommandFTBMode extends CommandBase
 {
-	public String getCommandName()
+	public String getName()
 	{ return "ftb_mode"; }
 	
 	public String getCommandUsage(ICommandSender ics)
@@ -19,19 +19,19 @@ public class CommandFTBMode extends CommandBase
 	public int getRequiredPermissionLevel()
 	{ return 2; }
 	
-	public boolean canCommandSenderUseCommand(ICommandSender ics)
-	{ return !FTBLib.getServer().isDedicatedServer() || super.canCommandSenderUseCommand(ics); }
+	public boolean canCommandSenderUse(ICommandSender ics)
+	{ return !FTBLib.getServer().isDedicatedServer() || super.canCommandSenderUse(ics); }
 	
 	@SuppressWarnings("all")
-	public List addTabCompletionOptions(ICommandSender ics, String[] args)
+	public List addTabCompletionOptions(ICommandSender ics, String[] args, BlockPos pos)
 	{
 		if(args.length == 1) return getListOfStringsMatchingLastWord(args, "get", "set", "list");
 		else if(args.length == 2 && args[0].equals("set"))
-			return getListOfStringsFromIterableMatchingLastWord(args, FTBWorld.getAllModes().allModes);
+			return func_175762_a(args, FTBWorld.getAllModes().allModes);
 		return null;
 	}
 	
-	public void processCommand(ICommandSender ics, String[] args)
+	public void execute(ICommandSender ics, String[] args)
 	{
 		IChatComponent c = execCmd(ics, args);
 		if(c != null) ics.addChatMessage(c);

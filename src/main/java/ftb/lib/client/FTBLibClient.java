@@ -7,9 +7,6 @@ import java.util.UUID;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.relauncher.*;
 import latmod.lib.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -20,20 +17,23 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.*;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.relauncher.*;
 
 @SideOnly(Side.CLIENT)
 public class FTBLibClient // LatCoreMCClient
 {
 	public static final Minecraft mc = FMLClientHandler.instance().getClient();
 	private static final FastMap<String, ResourceLocation> cachedSkins = new FastMap<String, ResourceLocation>();
-	public static IIcon blockNullIcon, unknownItemIcon;
+	//public static IIcon blockNullIcon, unknownItemIcon;
 	private static final ResourceLocation clickSound = new ResourceLocation("gui.button.press");
 	private static float lastBrightnessX, lastBrightnessY;
 	
 	public static UUID getUUID()
-	{ return mc.getSession().func_148256_e().getId(); }
+	{ return mc.getSession().getProfile().getId(); }
 	
 	public static void spawnPart(EntityFX e)
 	{ mc.effectRenderer.addEffect(e); }
@@ -57,7 +57,7 @@ public class FTBLibClient // LatCoreMCClient
 		
 		if(mc.theWorld != null)
 		{
-			EntityPlayer ep = mc.theWorld.func_152378_a(uuid);
+			EntityPlayer ep = mc.theWorld.getPlayerEntityByUUID(uuid);
 			if(ep != null && ep instanceof EntityPlayerSP)
 				return (EntityPlayerSP)ep;
 		}
@@ -80,7 +80,7 @@ public class FTBLibClient // LatCoreMCClient
 	}
 	
 	public static void playClickSound()
-	{ mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(clickSound, 1F)); }
+	{ mc.getSoundHandler().playSound(PositionedSoundRecord.create(clickSound, 1F)); }
 	
 	public static void setGLColor(int c, int a)
 	{

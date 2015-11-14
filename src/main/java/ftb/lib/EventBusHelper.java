@@ -1,7 +1,7 @@
 package ftb.lib;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class EventBusHelper
 {

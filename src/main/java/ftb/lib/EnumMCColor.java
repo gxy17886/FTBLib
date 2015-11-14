@@ -3,7 +3,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.*;
 import net.minecraft.util.StatCollector;
 
-public enum EnumDyeColor // ItemDye
+public enum EnumMCColor // ItemDye
 {
 	BLACK("Black", 0xFF3F3F3F),
 	RED("Red", 0xFFFF0000),
@@ -22,25 +22,23 @@ public enum EnumDyeColor // ItemDye
 	ORANGE("Orange", 0xFFFF9500),
 	WHITE("White", 0xFFFFFFFF);
 	
-	public static final EnumDyeColor[] VALUES = values();
+	public static final EnumMCColor[] VALUES = values();
 	
 	public final int ID;
 	public final String lang;
-	public final String name;
-	public final int color;
+	public final EnumDyeColor dyeColor;
 	public final int colorBright;
+	
 	public final String dyeName;
 	public final String glassName;
 	public final String paneName;
 
-	EnumDyeColor(String s, int c)
+	EnumMCColor(String s, int c)
 	{
 		ID = ordinal();
-		name = ItemDye.field_150921_b[ID];
-		lang = "ftbl:color." + name;
-		color = ItemDye.field_150922_c[ID];
+		lang = "ftbl:color." + s.toLowerCase();
 		colorBright = c;
-		
+		dyeColor = EnumDyeColor.values()[ID];
 		dyeName = "dye" + s;
 		glassName = "blockGlass" + s;
 		paneName = "paneGlass" + s;

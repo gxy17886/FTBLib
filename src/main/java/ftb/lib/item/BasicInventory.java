@@ -3,6 +3,7 @@ package ftb.lib.item;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.*;
 
 public class BasicInventory implements IInventory
 {
@@ -26,10 +27,13 @@ public class BasicInventory implements IInventory
 	public void setInventorySlotContents(int i, ItemStack is)
 	{ items[i] = is; markDirty(); }
 	
-	public String getInventoryName()
+	public String getName()
 	{ return ""; }
 	
-	public boolean hasCustomInventoryName()
+	public IChatComponent getDisplayName()
+	{ return new ChatComponentText(getName()); }
+	
+	public boolean hasCustomName()
 	{ return false; }
 	
 	public int getInventoryStackLimit()
@@ -40,10 +44,26 @@ public class BasicInventory implements IInventory
 	public boolean isUseableByPlayer(EntityPlayer ep)
 	{ return true; }
 	
-	public void openInventory() { }
+	public void openInventory(EntityPlayer ep) { }
 	
-	public void closeInventory() { }
+	public void closeInventory(EntityPlayer ep) { }
 	
 	public boolean isItemValidForSlot(int i, ItemStack is)
 	{ return true; }
+	
+	public int getField(int id)
+	{ return 0; }
+	
+	public void setField(int id, int value)
+	{
+	}
+	
+	public int getFieldCount()
+	{ return 0; }
+	
+	public void clear()
+	{
+		for(int i = 0; i < items.length; i++)
+			items[i] = null;
+	}
 }

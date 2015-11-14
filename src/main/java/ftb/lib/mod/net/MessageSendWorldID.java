@@ -2,9 +2,9 @@ package ftb.lib.mod.net;
 
 import java.util.UUID;
 
-import cpw.mods.fml.common.network.simpleimpl.*;
 import ftb.lib.FTBWorld;
 import ftb.lib.api.*;
+import net.minecraftforge.fml.common.network.simpleimpl.*;
 
 public class MessageSendWorldID extends MessageLM
 {

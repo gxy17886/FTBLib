@@ -6,7 +6,7 @@ import net.minecraft.util.ChatComponentTranslation;
 
 public class CommandFTBWorldID extends CommandBase
 {
-	public String getCommandName()
+	public String getName()
 	{ return "ftb_worldID"; }
 	
 	public String getCommandUsage(ICommandSender ics)
@@ -15,6 +15,6 @@ public class CommandFTBWorldID extends CommandBase
 	public int getRequiredPermissionLevel()
 	{ return 0; }
 	
-	public void processCommand(ICommandSender ics, String[] args)
+	public void execute(ICommandSender ics, String[] args)
 	{ ics.addChatMessage(new ChatComponentTranslation("ftbl:worldID", FTBWorld.server.getWorldIDS())); }
 }

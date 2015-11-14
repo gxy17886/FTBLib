@@ -32,7 +32,7 @@ public class LMDimUtils
 		WorldServer w1 = mcs.worldServerForDimension(dim);
 		if (w1 == null)
 		{
-			System.err.println("Cannot teleport " + ep.getCommandSenderName() + " to Dimension " + dim + ": Missing WorldServer");
+			System.err.println("Cannot teleport " + ep.getName() + " to Dimension " + dim + ": Missing WorldServer");
 			return false;
 		}
 		
@@ -52,7 +52,7 @@ public class LMDimUtils
 		if(chw)
 		{
 			ep.dimension = dim;
-			ep.playerNetServerHandler.sendPacket(new S07PacketRespawn(ep.dimension, ep.worldObj.difficultySetting, w1.getWorldInfo().getTerrainType(), ep.theItemInWorldManager.getGameType()));
+			ep.playerNetServerHandler.sendPacket(new S07PacketRespawn(ep.dimension, ep.worldObj.getDifficulty(), w1.getWorldInfo().getTerrainType(), ep.theItemInWorldManager.getGameType()));
 			w0.getPlayerManager().removePlayer(ep);
 			
 			ep.closeScreen();
@@ -64,7 +64,7 @@ public class LMDimUtils
 			if(ep.addedToChunk && w0.getChunkProvider().chunkExists(i, j))
 			{
 				w0.getChunkFromChunkCoords(i, j).removeEntity(ep);
-				w0.getChunkFromChunkCoords(i, j).isModified = true;
+				w0.getChunkFromChunkCoords(i, j).setModified(true);
 			}
 			
 			w0.loadedEntityList.remove(ep);
@@ -131,7 +131,7 @@ public class LMDimUtils
 	public static double getWorldScale(int dim)
 	{ return 1D / getMovementFactor(dim); }
 	
-	public static ChunkCoordinates getSpawnPoint(int dim)
+	public static BlockPos getSpawnPoint(int dim)
 	{
 		World w = getWorld(dim);
 		return (w == null) ? null : w.getSpawnPoint();
@@ -139,24 +139,24 @@ public class LMDimUtils
 	
 	public static EntityPos getEntitySpawnPoint(int dim)
 	{
-		ChunkCoordinates c = getSpawnPoint(dim);
+		BlockPos c = getSpawnPoint(dim);
 		if(c == null) return null;
 		return new EntityPos(c, dim);
 	}
 	
-	public static ChunkCoordinates getPlayerSpawnPoint(EntityPlayerMP ep, int dim)
+	public static BlockPos getPlayerSpawnPoint(EntityPlayerMP ep, int dim)
 	{
-		ChunkCoordinates c = ep.getBedLocation(dim);
+		BlockPos c = ep.getBedLocation(dim);
 		return (c == null) ? getSpawnPoint(dim) : c;
 	}
 	
 	public static EntityPos getPlayerEntitySpawnPoint(EntityPlayerMP ep, int dim)
 	{
-		ChunkCoordinates c = getPlayerSpawnPoint(ep, dim);
+		BlockPos c = getPlayerSpawnPoint(ep, dim);
 		EntityPos p = new EntityPos();
-		p.x = c.posX + 0.5D;
-		p.y = c.posY + 0.5D;
-		p.z = c.posZ + 0.5D;
+		p.x = c.getX() + 0.5D;
+		p.y = c.getY() + 0.5D;
+		p.z = c.getZ() + 0.5D;
 		p.dim = dim;
 		return p;
 	}

@@ -4,7 +4,7 @@ import net.minecraft.command.*;
 
 public class CommandFTBReload extends CommandBase
 {
-	public String getCommandName()
+	public String getName()
 	{ return "ftb_reload"; }
 	
 	public String getCommandUsage(ICommandSender ics)
@@ -13,6 +13,6 @@ public class CommandFTBReload extends CommandBase
 	public int getRequiredPermissionLevel()
 	{ return 4; }
 	
-	public void processCommand(ICommandSender ics, String[] args)
+	public void execute(ICommandSender ics, String[] args)
 	{ FTBLibMod.reload(ics, true); }
 }

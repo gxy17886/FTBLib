@@ -1,9 +1,9 @@
 package ftb.lib.mod.net;
 
-import cpw.mods.fml.common.network.simpleimpl.*;
-import cpw.mods.fml.relauncher.Side;
 import ftb.lib.FTBWorld;
 import ftb.lib.api.*;
+import net.minecraftforge.fml.common.network.simpleimpl.*;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class MessageSendGameMode extends MessageLM
 {

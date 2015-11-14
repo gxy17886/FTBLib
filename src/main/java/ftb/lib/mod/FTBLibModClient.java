@@ -4,18 +4,16 @@ import java.util.UUID;
 
 import org.lwjgl.input.Keyboard;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.*;
 import ftb.lib.*;
 import ftb.lib.api.gui.*;
 import ftb.lib.client.FTBLibClient;
-import latmod.lib.LMColorUtils;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
-import net.minecraft.client.particle.EntityReddustFX;
 import net.minecraft.entity.player.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.*;
 
 @SideOnly(Side.CLIENT)
 public class FTBLibModClient extends FTBLibModCommon
@@ -50,6 +48,7 @@ public class FTBLibModClient extends FTBLibModCommon
 	
 	public void spawnDust(World w, double x, double y, double z, int col)
 	{
+		/* FIXME: Dust Particle
 		EntityReddustFX fx = new EntityReddustFX(w, x, y, z, 0F, 0F, 0F);
 		
 		float alpha = LMColorUtils.getAlpha(col) / 255F;
@@ -61,6 +60,7 @@ public class FTBLibModClient extends FTBLibModCommon
 		fx.setRBGColorF(red, green, blue);
 		fx.setAlphaF(alpha);
 		FTBLibClient.mc.effectRenderer.addEffect(fx);
+		*/
 	}
 	
 	public boolean openClientGui(EntityPlayer ep, String mod, int id, NBTTagCompound data)

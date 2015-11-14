@@ -1,9 +1,5 @@
 package ftb.lib.mod;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
 import ftb.lib.FTBWorld;
 import ftb.lib.api.*;
 import ftb.lib.api.config.ConfigListRegistry;
@@ -12,6 +8,10 @@ import latmod.lib.FastList;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class FTBLibEventHandler
 {
@@ -23,7 +23,7 @@ public class FTBLibEventHandler
 	@SubscribeEvent
 	public void onServerStarted(WorldEvent.Load e)
 	{
-		if(e.world.provider.dimensionId == 0 && e.world instanceof WorldServer)
+		if(e.world.provider.getDimensionId() == 0 && e.world instanceof WorldServer)
 		{
 			ConfigListRegistry.reloadInstance();
 			FTBWorld.reloadGameModes();

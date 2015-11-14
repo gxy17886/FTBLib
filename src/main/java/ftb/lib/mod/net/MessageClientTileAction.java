@@ -1,10 +1,11 @@
 package ftb.lib.mod.net;
-import cpw.mods.fml.common.network.simpleimpl.*;
 import ftb.lib.api.*;
 import ftb.lib.api.gui.IClientActionTile;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.common.network.simpleimpl.*;
 
 public class MessageClientTileAction extends MessageLM
 {
@@ -13,9 +14,9 @@ public class MessageClientTileAction extends MessageLM
 	public MessageClientTileAction(TileEntity t, String s, NBTTagCompound tag)
 	{
 		this();
-		io.writeInt(t.xCoord);
-		io.writeInt(t.yCoord);
-		io.writeInt(t.zCoord);
+		io.writeInt(t.getPos().getX());
+		io.writeInt(t.getPos().getY());
+		io.writeInt(t.getPos().getZ());
 		io.writeString(s);
 		writeTag(tag);
 	}
@@ -32,7 +33,7 @@ public class MessageClientTileAction extends MessageLM
 		NBTTagCompound data = readTag();
 		
 		EntityPlayerMP ep = ctx.getServerHandler().playerEntity;
-		TileEntity te = ep.worldObj.getTileEntity(x, y, z);
+		TileEntity te = ep.worldObj.getTileEntity(new BlockPos(x, y, z));
 		
 		if(te instanceof IClientActionTile)
 			((IClientActionTile)te).onClientAction(ep, action, data);

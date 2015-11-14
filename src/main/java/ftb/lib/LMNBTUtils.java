@@ -25,15 +25,11 @@ public class LMNBTUtils
 	public static String[] getMapKeysA(NBTTagCompound tag)
 	{
 		if(tag == null || tag.hasNoTags()) return new String[0];
-		return (String[]) tag.func_150296_c().toArray(new String[0]);
+		return (String[]) tag.getKeySet().toArray(new String[0]);
 	}
 	
 	public static FastList<String> getMapKeys(NBTTagCompound tag)
-	{
-		FastList<String> list = new FastList<String>();
-		if(tag == null || tag.hasNoTags()) return list;
-		list.addAll(tag.func_150296_c()); return list;
-	}
+	{ return (tag == null) ? new FastList<String>() : FastList.asList(getMapKeysA(tag)); }
 	
 	public static FastMap<String, NBTBase> toFastMap(NBTTagCompound tag)
 	{
@@ -59,10 +55,7 @@ public class LMNBTUtils
 	}
 	
 	public static void writeMap(OutputStream os, NBTTagCompound tag) throws Exception
-	{
-		byte[] b = CompressedStreamTools.compress(tag);
-		os.write(b); os.flush(); os.close();
-	}
+	{ CompressedStreamTools.writeCompressed(tag, os); }
 	
 	public static Exception writeMap(File f, NBTTagCompound tag)
 	{
@@ -71,10 +64,7 @@ public class LMNBTUtils
 	}
 	
 	public static NBTTagCompound readMap(InputStream is) throws Exception
-	{
-		byte[] b = new byte[is.available()]; is.read(b); is.close();
-		return CompressedStreamTools.func_152457_a(b, NBTSizeTracker.field_152451_a);
-	}
+	{ return CompressedStreamTools.readCompressed(is); }
 	
 	public static NBTTagCompound readMap(File f)
 	{

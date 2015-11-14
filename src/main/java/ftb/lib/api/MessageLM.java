@@ -1,10 +1,13 @@
 package ftb.lib.api;
 
-import cpw.mods.fml.common.network.simpleimpl.*;
+import java.io.*;
+
+import ftb.lib.LMNBTUtils;
 import io.netty.buffer.ByteBuf;
 import latmod.lib.ByteIOStream;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.network.simpleimpl.*;
 
 public abstract class MessageLM implements IMessage, IMessageHandler<MessageLM, IMessage>
 {
@@ -17,7 +20,7 @@ public abstract class MessageLM implements IMessage, IMessageHandler<MessageLM, 
 			{
 				byte[] abyte = new byte[s];
 				io.readRawBytes(abyte);
-				return CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L));
+				return LMNBTUtils.readMap(new ByteArrayInputStream(abyte));
 			}
 		}
 		catch(Exception ex)
@@ -34,7 +37,9 @@ public abstract class MessageLM implements IMessage, IMessageHandler<MessageLM, 
 				io.writeShort((short)-1);
 			else
 			{
-				byte[] abyte = CompressedStreamTools.compress(tag);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				LMNBTUtils.writeMap(baos, tag);
+				byte[] abyte = baos.toByteArray();
 				io.writeShort((short)abyte.length);
 				io.writeRawBytes(abyte);
 			}

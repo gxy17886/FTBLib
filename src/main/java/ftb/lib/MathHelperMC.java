@@ -24,8 +24,8 @@ public class MathHelperMC
 		return 6;
 	}
 	
-	public static int get3DRotation(World w, int x, int y, int z, EntityLivingBase el)
-	{ return BlockPistonBase.determineOrientation(w, x, y, z, el); }
+	public static EnumFacing get3DRotation(World w, BlockPos pos, EntityLivingBase el)
+	{ return BlockPistonBase.getFacingFromEntity(w, pos, el); }
 	
 	public static VecLM randomAABB(Random r, AxisAlignedBB bb)
 	{
@@ -39,7 +39,7 @@ public class MathHelperMC
 	{
 		double y = 0D;
 		if(!ep.worldObj.isRemote) y = ep.getEyeHeight();
-		return Vec3.createVectorHelper(ep.posX, ep.posY + y, ep.posZ);
+		return new Vec3(ep.posX, ep.posY + y, ep.posZ);
 	}
 	
 	public static MovingObjectPosition rayTrace(EntityPlayer ep, double d)
@@ -48,15 +48,15 @@ public class MathHelperMC
 		Vec3 pos = getEyePosition(ep);
 		Vec3 look = ep.getLookVec();
 		Vec3 vec = pos.addVector(look.xCoord * d, look.yCoord * d, look.zCoord * d);
-		MovingObjectPosition mop = ep.worldObj.func_147447_a(pos, vec, false, true, false);
-		if(mop != null && mop.hitVec == null) mop.hitVec = Vec3.createVectorHelper(0D, 0D, 0D);
+		MovingObjectPosition mop = ep.worldObj.rayTraceBlocks(pos, vec, false, true, false);
+		if(mop != null && mop.hitVec == null) mop.hitVec = new Vec3(0D, 0D, 0D);
 		return mop;
 	}
 	
 	public static MovingObjectPosition rayTrace(EntityPlayer ep)
 	{ return rayTrace(ep, FTBLibMod.proxy.getReachDist(ep)); }
 	
-	public static MovingObjectPosition collisionRayTrace(World w, int x, int y, int z, Vec3 start, Vec3 end, AxisAlignedBB[] boxes)
+	public static MovingObjectPosition collisionRayTrace(World w, BlockPos block, Vec3 start, Vec3 end, AxisAlignedBB[] boxes)
 	{
 		if(boxes == null || boxes.length <= 0) return null;
 		
@@ -67,7 +67,7 @@ public class MathHelperMC
 		{
 			if(boxes[i] != null)
 			{
-				MovingObjectPosition mop = collisionRayTrace(w, x, y, z, start, end, boxes[i]);
+				MovingObjectPosition mop = collisionRayTrace(w, block, start, end, boxes[i]);
 				
 				if(mop != null)
 				{
@@ -85,17 +85,17 @@ public class MathHelperMC
 		return current;
 	}
 	
-	public static MovingObjectPosition collisionRayTrace(World w, int x, int y, int z, Vec3 start, Vec3 end, FastList<AxisAlignedBB> boxes)
+	public static MovingObjectPosition collisionRayTrace(World w, BlockPos block, Vec3 start, Vec3 end, FastList<AxisAlignedBB> boxes)
 	{
 		AxisAlignedBB[] boxesa = new AxisAlignedBB[boxes.size()];
-		for(int i = 0; i < boxesa.length; i++) boxesa[i] = boxes.get(i).copy();
-		return collisionRayTrace(w, x, y, z, start, end, boxesa);
+		for(int i = 0; i < boxesa.length; i++) boxesa[i] = boxes.get(i).offset(0D, 0D, 0D);
+		return collisionRayTrace(w, block, start, end, boxesa);
 	}
 	
-	public static MovingObjectPosition collisionRayTrace(World w, int x, int y, int z, Vec3 start, Vec3 end, AxisAlignedBB aabb)
+	public static MovingObjectPosition collisionRayTrace(World w, BlockPos block, Vec3 start, Vec3 end, AxisAlignedBB aabb)
 	{
-		Vec3 pos = start.addVector(-x, -y, -z);
-		Vec3 rot = end.addVector(-x, -y, -z);
+		Vec3 pos = start.addVector(-block.getX(), -block.getY(), -block.getZ());
+		Vec3 rot = end.addVector(-block.getX(), -block.getY(), -block.getZ());
 		
 		Vec3 xmin = pos.getIntermediateWithXValue(rot, aabb.minX);
 		Vec3 xmax = pos.getIntermediateWithXValue(rot, aabb.maxX);
@@ -120,16 +120,16 @@ public class MathHelperMC
 		if (zmax != null && (v == null || pos.squareDistanceTo(zmax) < pos.squareDistanceTo(v))) v = zmax;
 		if (v == null) return null; else
 		{
-			int side = -1;
+			EnumFacing side = null;
 
-			if (v == xmin) side = 4;
-			if (v == xmax) side = 5;
-			if (v == ymin) side = 0;
-			if (v == ymax) side = 1;
-			if (v == zmin) side = 2;
-			if (v == zmax) side = 3;
+			if (v == xmin) side = EnumFacing.WEST;
+			if (v == xmax) side = EnumFacing.EAST;
+			if (v == ymin) side = EnumFacing.DOWN;
+			if (v == ymax) side = EnumFacing.UP;
+			if (v == zmin) side = EnumFacing.NORTH;
+			if (v == zmax) side = EnumFacing.SOUTH;
 			
-			return new MovingObjectPosition(x, y, z, side, v.addVector(x, y, z));
+			return new MovingObjectPosition(v.addVector(block.getX(), block.getY(), block.getZ()), side, block);
 		}
 	}
 	
@@ -142,11 +142,11 @@ public class MathHelperMC
 	private static boolean isVecInsideXYBounds(Vec3 v, AxisAlignedBB aabb)
 	{ return v == null ? false : v.xCoord >= aabb.minX && v.xCoord <= aabb.maxX && v.yCoord >= aabb.minY && v.yCoord <= aabb.maxY; }
 	
-	public static MovingObjectPosition getMOPFrom(int x, int y, int z, int s, float hitX, float hitY, float hitZ)
-	{ return new MovingObjectPosition(x, y, z, s, Vec3.createVectorHelper(x + hitX, y + hitY, z + hitZ)); }
+	public static MovingObjectPosition getMOPFrom(BlockPos block, EnumFacing s, float hitX, float hitY, float hitZ)
+	{ return new MovingObjectPosition(new Vec3(block.getX() + hitX, block.getY() + hitY, block.getZ() + hitZ), s, block); }
 	
 	public static AxisAlignedBB getBox(double cx, double y0, double cz, double w, double y1, double d)
-	{ return AxisAlignedBB.getBoundingBox(cx - w / 2D, y0, cz - d / 2D, cx + w / 2D, y1, cz + d / 2D); }
+	{ return new AxisAlignedBB(cx - w / 2D, y0, cz - d / 2D, cx + w / 2D, y1, cz + d / 2D); }
 	
 	public static AxisAlignedBB centerBox(double x, double y, double z, double w, double h, double d)
 	{ return getBox(x, y - h / 2D, z, w, y + h / 2D, d); }
@@ -162,7 +162,7 @@ public class MathHelperMC
 		double z2 = bb.maxZ;
 		
 		if(dir < 0 || dir >= 6 || dir == 2 || dir == 3)
-			return AxisAlignedBB.getBoundingBox(x1, y1, z1, x2, y2, z2);
-		return AxisAlignedBB.getBoundingBox(z1, y1, x1, z2, y2, x2);
+			return new AxisAlignedBB(x1, y1, z1, x2, y2, z2);
+		return new AxisAlignedBB(z1, y1, x1, z2, y2, x2);
 	}
 }

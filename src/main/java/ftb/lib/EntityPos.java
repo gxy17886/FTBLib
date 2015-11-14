@@ -4,7 +4,7 @@ import latmod.lib.MathHelperLM;
 import latmod.lib.util.VecLM;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 
 public class EntityPos implements Cloneable
 {
@@ -16,7 +16,7 @@ public class EntityPos implements Cloneable
 	public EntityPos(Entity e)
 	{ set(e); }
 	
-	public EntityPos(ChunkCoordinates c, int dim)
+	public EntityPos(BlockPos c, int dim)
 	{ set(c, dim); }
 	
 	public EntityPos(double px, double py, double pz, int d)
@@ -31,8 +31,8 @@ public class EntityPos implements Cloneable
 	public void set(Entity e)
 	{ setPos(e.posX, e.posY, e.posZ, e.dimension); }
 	
-	public void set(ChunkCoordinates c, int dim)
-	{ setPos(c.posX + 0.5D, c.posY + 0.5D, c.posZ + 0.5D, dim); }
+	public void set(BlockPos c, int dim)
+	{ setPos(c.getX() + 0.5D, c.getY() + 0.5D, c.getZ() + 0.5D, dim); }
 	
 	public void readFromNBT(NBTTagCompound tag)
 	{
@@ -59,8 +59,8 @@ public class EntityPos implements Cloneable
 	public int intZ()
 	{ return MathHelperLM.floor(z); }
 	
-	public ChunkCoordinates toChunkCoordinates()
-	{ return new ChunkCoordinates(intX(), intY(), intZ()); }
+	public BlockPos toBlockPos()
+	{ return new BlockPos(intX(), intY(), intZ()); }
 	
 	public VecLM toVertex()
 	{ return new VecLM(x, y, z); }
