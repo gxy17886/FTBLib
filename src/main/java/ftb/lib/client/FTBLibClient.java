@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import java.util.UUID;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 
 import latmod.lib.*;
 import net.minecraft.client.Minecraft;
@@ -87,7 +86,7 @@ public class FTBLibClient // LatCoreMCClient
 		int r = LMColorUtils.getRed(c);
 		int g = LMColorUtils.getGreen(c);
 		int b = LMColorUtils.getBlue(c);
-		GL11.glColor4f(r / 255F, g / 255F, b / 255F, a / 255F);
+		GlStateManager.color(r / 255F, g / 255F, b / 255F, a / 255F);
 	}
 	
 	public static void setGLColor(int c)
